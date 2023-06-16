@@ -7,12 +7,12 @@ object HOFsCurries extends App:
   // Map, FlatMap, Filter
 
   // Função que executa uma função n vezes em cima de um valor x
-  // nTime(f, n, x) 
+  // nTime(f, n, x)
   // nTime(f, n, x) = f(f(f(x))) = nTimes(f, 2, f(x)) = f(f(f(x)))
   // nTimes(f, n, x) = f(f(...f(x))) = nTimes(f, n-1, f(x))
   def nTimes(f: Int => Int, n: Int, x: Int): Int =
     if (n <= 0) x
-    else nTimes(f, n-1, f(x))
+    else nTimes(f, n - 1, f(x))
 
   val plusOne = (x: Int) => x + 1
   println(nTimes(plusOne, 5, 1))
@@ -22,7 +22,7 @@ object HOFsCurries extends App:
   // val y = increment5(1)
   def betterNTimes(f: Int => Int, n: Int): (Int => Int) =
     if (n <= 0) (x: Int) => x
-    else (x: Int) => betterNTimes(f, n-1)(f(x))
+    else (x: Int) => betterNTimes(f, n - 1)(f(x))
 
   val plus10 = betterNTimes(plusOne, 10)
   println(plus10(1))
@@ -43,4 +43,10 @@ object HOFsCurries extends App:
   println(standardFormat(Math.PI))
   println(preciseFormat(Math.PI))
 
+  def toCurry(f: (Int, Int) => Int): (Int => Int => Int) = x => y => f(x, y)
+  def fromCurry(f: Int => (Int => Int)): (Int, Int) => Int = (x: Int, y: Int) =>
+    f(x)(y)
+
+  def compose[A, B, T](f: A => B, g: T => A): T => B = x => f(g(x))
+  def andThen[A, B, T](f: A => B, g: B => T): A => T = x => g(f(x))
 end HOFsCurries
