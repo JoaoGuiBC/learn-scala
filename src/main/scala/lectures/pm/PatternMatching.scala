@@ -34,6 +34,7 @@ object PatternMatching extends App {
   val animal: Animal = Dog("Terra Nova")
   animal match
     case Dog(someBreed) => println(s"Matched a Dog of the $someBreed breed")
+    case _              => println("Does not match any known animal")
 
   trait Expr
   case class Number(n: Int) extends Expr
